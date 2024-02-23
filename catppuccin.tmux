@@ -123,6 +123,7 @@ build_pane_format() {
   fi
 }
 
+# Special setting just for making separator has the same color with background
 build_window_format() {
   local number=$1
   local color=$2
@@ -138,40 +139,44 @@ build_window_format() {
 
   if [ "$fill" = "none" ]
   then
-    local show_left_separator="#[fg=$thm_gray,bg=$thm_bg,nobold,nounderscore,noitalics]$window_left_separator"
+    local show_left_separator="#[fg=$thm_gray,bg=default,nobold,nounderscore,noitalics]$window_left_separator"
     local show_number="#[fg=$thm_fg,bg=$thm_gray]$number"
-    local show_middle_separator="#[fg=$thm_fg,bg=$thm_gray,nobold,nounderscore,noitalics]$window_middle_separator"
+    # inner separator should follow default setting
+    local show_middle_separator="#[fg=background,bg=default,nobold,nounderscore,noitalics]$window_middle_separator"
     local show_text="#[fg=$thm_fg,bg=$thm_gray]$text"
-    local show_right_separator="#[fg=$thm_gray,bg=$thm_bg]$window_right_separator"
+    local show_right_separator="#[fg=$thm_gray,bg=$default]$window_right_separator"
 
   fi
 
   if [ "$fill" = "all" ]
   then
-    local show_left_separator="#[fg=$color,bg=$thm_bg,nobold,nounderscore,noitalics]$window_left_separator"
-    local show_number="#[fg=$background,bg=$color]$number"
-    local show_middle_separator="#[fg=$background,bg=$color,nobold,nounderscore,noitalics]$window_middle_separator"
-    local show_text="#[fg=$background,bg=$color]$text"
-    local show_right_separator="#[fg=$color,bg=$thm_bg]$window_right_separator"
+    # bg $thm_bg => default to erase the unexpected background, while make foreground follow users's setting
+    local show_left_separator="#[fg=$background,bg=default,nobold,nounderscore,noitalics]$window_left_separator"
+    # reverse the color setting to make it follow user's setting
+    local show_number="#[fg=$color,bg=$background]$number"
+    # if there's space in separator character, let it has the default background to simulate `transparency`
+    local show_middle_separator="#[fg=$background,bg=default,nobold,nounderscore,noitalics]$window_middle_separator"
+    local show_text="#[fg=$color,bg=$background]$text"
+    local show_right_separator="#[fg=$background,bg=default]$window_right_separator"
 
   fi
 
   if [ "$fill" = "number" ]
   then
-    local show_number="#[fg=$background,bg=$color]$number"
-    local show_middle_separator="#[fg=$color,bg=$background,nobold,nounderscore,noitalics]$window_middle_separator"
-    local show_text="#[fg=$thm_fg,bg=$background]$text"
+    local show_number="#[fg=$color,bg=$background]$number"
+    local show_middle_separator="#[fg=$background,bg=default,nobold,nounderscore,noitalics]$window_middle_separator"
+    local show_text="#[fg=$color,bg=$background]$text"
 
     if [ "$window_number_position" = "right" ]
     then
-      local show_left_separator="#[fg=$background,bg=$thm_bg,nobold,nounderscore,noitalics]$window_left_separator"
-      local show_right_separator="#[fg=$color,bg=$thm_bg]$window_right_separator"
+      local show_left_separator="#[fg=$background,bg=default,nobold,nounderscore,noitalics]$window_left_separator"
+      local show_right_separator="#[fg=$background,bg=default]$window_right_separator"
     fi
 
     if [ "$window_number_position" = "left" ]
     then
-      local show_right_separator="#[fg=$background,bg=$thm_bg,nobold,nounderscore,noitalics]$window_right_separator"
-      local show_left_separator="#[fg=$color,bg=$thm_bg]$window_left_separator"
+      local show_right_separator="#[fg=$background,bg=$default,nobold,nounderscore,noitalics]$window_right_separator"
+      local show_left_separator="#[fg=$background,bg=$default]$window_left_separator"
     fi
 
   fi
@@ -201,10 +206,10 @@ build_status_module() {
   then
     local show_left_separator="#[fg=$color,bg=$thm_gray,nobold,nounderscore,noitalics]$status_left_separator"
 
-    local show_icon="#[fg=$thm_bg,bg=$color,nobold,nounderscore,noitalics]$icon "
+    local show_icon="#[fg=$thm_gray,bg=$color,nobold,nounderscore,noitalics]$icon "
     local show_text="#[fg=$thm_fg,bg=$thm_gray] $text"
 
-    local show_right_separator="#[fg=$thm_gray,bg=$thm_bg,nobold,nounderscore,noitalics]$status_right_separator"
+    local show_right_separator="#[fg=$thm_gray,bg=default,nobold,nounderscore,noitalics]$status_right_separator"
 
     if [ "$status_connect_separator" = "yes" ]
     then
@@ -212,8 +217,8 @@ build_status_module() {
       local show_right_separator="#[fg=$thm_gray,bg=$thm_gray,nobold,nounderscore,noitalics]$status_right_separator"
 
     else
-      local show_left_separator="#[fg=$color,bg=$thm_bg,nobold,nounderscore,noitalics]$status_left_separator"
-      local show_right_separator="#[fg=$thm_gray,bg=$thm_bg,nobold,nounderscore,noitalics]$status_right_separator"
+      local show_left_separator="#[fg=$color,bg=default,nobold,nounderscore,noitalics]$status_left_separator"
+      local show_right_separator="#[fg=$thm_gray,bg=default,nobold,nounderscore,noitalics]$status_right_separator"
     fi
 
   fi
@@ -222,8 +227,8 @@ build_status_module() {
   then
     local show_left_separator="#[fg=$color,bg=$thm_gray,nobold,nounderscore,noitalics]$status_left_separator"
 
-    local show_icon="#[fg=$thm_bg,bg=$color,nobold,nounderscore,noitalics]$icon "
-    local show_text="#[fg=$thm_bg,bg=$color]$text"
+    local show_icon="#[fg=$thm_gray,bg=$color,nobold,nounderscore,noitalics]$icon "
+    local show_text="#[fg=$thm_gray,bg=$color]$text"
 
     local show_right_separator="#[fg=$color,bg=$thm_gray,nobold,nounderscore,noitalics]$status_right_separator"
 
@@ -233,8 +238,8 @@ build_status_module() {
       local show_right_separator="#[fg=$color,bg=$color,nobold,nounderscore,noitalics]$status_right_separator"
 
     else
-      local show_left_separator="#[fg=$color,bg=$thm_bg,nobold,nounderscore,noitalics]$status_left_separator"
-      local show_right_separator="#[fg=$color,bg=$thm_bg,nobold,nounderscore,noitalics]$status_right_separator"
+      local show_left_separator="#[fg=$color,bg=default,nobold,nounderscore,noitalics]$status_left_separator"
+      local show_right_separator="#[fg=$color,bg=default,nobold,nounderscore,noitalics]$status_right_separator"
     fi
 
   fi
@@ -245,13 +250,13 @@ build_status_module() {
     then
       local show_right_separator="#[fg=$thm_gray,bg=$color,nobold,nounderscore,noitalics]$status_right_separator"
     else
-      local show_right_separator="#[fg=$thm_bg,bg=$color,nobold,nounderscore,noitalics]$status_right_separator"
+      local show_right_separator="#[fg=$thm_gray,bg=$color,nobold,nounderscore,noitalics]$status_right_separator"
     fi
   fi
 
   if [ $(($index)) -eq 0  ]
   then
-      local show_left_separator="#[fg=$color,bg=$thm_bg,nobold,nounderscore,noitalics]$status_left_separator"
+      local show_left_separator="#[fg=$color,bg=default,nobold,nounderscore,noitalics]$status_left_separator"
   fi
 
   echo "$show_left_separator$show_icon$show_text$show_right_separator"
@@ -323,14 +328,16 @@ main() {
 
   # status
   set status "on"
-  set status-bg "${thm_bg}"
+  set status-bg default
+  # set status-bg "${thm_bg}"
   set status-justify "left"
   set status-left-length "100"
   set status-right-length "100"
+  set status-left-style fg=default,bg=default
 
   # messages
-  set message-style "fg=${thm_cyan},bg=${thm_gray},align=centre"
-  set message-command-style "fg=${thm_cyan},bg=${thm_gray},align=centre"
+  set message-style "fg=${thm_cyan},bg=default,align=centre"
+  set message-command-style "fg=${thm_cyan},bg=default,align=centre"
 
   # panes
   local pane_status_enable=$(get_tmux_option "@catppuccin_pane_status_enabled" "no") # yes
@@ -353,6 +360,10 @@ main() {
   setw window-status-activity-style "fg=${thm_fg},bg=${thm_bg},none"
   setw window-status-separator ""
   setw window-status-style "fg=${thm_fg},bg=${thm_bg},none"
+
+  # setw window-status-current-style fg=default,bg=default,none
+  # setw window-status-style fg=default,bg=default,none
+
 
   # --------=== Statusline
 
