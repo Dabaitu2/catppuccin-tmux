@@ -142,7 +142,7 @@ build_window_format() {
     local show_left_separator="#[fg=$thm_gray,bg=default,nobold,nounderscore,noitalics]$window_left_separator"
     local show_number="#[fg=$thm_fg,bg=$thm_gray]$number"
     # inner separator should follow default setting
-    local show_middle_separator="#[fg=background,bg=default,nobold,nounderscore,noitalics]$window_middle_separator"
+    local show_middle_separator="#[fg=$thm_gray,bg=$thm_gray,nobold,nounderscore,noitalics]$window_middle_separator"
     local show_text="#[fg=$thm_fg,bg=$thm_gray]$text"
     local show_right_separator="#[fg=$thm_gray,bg=$default]$window_right_separator"
 
@@ -155,7 +155,7 @@ build_window_format() {
     # reverse the color setting to make it follow user's setting
     local show_number="#[fg=$color,bg=$background]$number"
     # if there's space in separator character, let it has the default background to simulate `transparency`
-    local show_middle_separator="#[fg=$background,bg=default,nobold,nounderscore,noitalics]$window_middle_separator"
+    local show_middle_separator="#[fg=$background,bg=$background,nobold,nounderscore,noitalics]$window_middle_separator"
     local show_text="#[fg=$color,bg=$background]$text"
     local show_right_separator="#[fg=$background,bg=default]$window_right_separator"
 
@@ -328,12 +328,12 @@ main() {
 
   # status
   set status "on"
-  set status-bg default
+  set status-bg "default"
   # set status-bg "${thm_bg}"
   set status-justify "left"
   set status-left-length "100"
   set status-right-length "100"
-  set status-left-style fg=default,bg=default
+  set status-left-style "fg=default,bg=default"
 
   # messages
   set message-style "fg=${thm_cyan},bg=default,align=centre"
@@ -357,11 +357,11 @@ main() {
 
 
   # windows
-  setw window-status-activity-style "fg=${thm_fg},bg=${thm_bg},none"
+  setw window-status-activity-style "fg=${thm_fg},bg=default,none"
   setw window-status-separator ""
-  setw window-status-style "fg=${thm_fg},bg=${thm_bg},none"
+  setw window-status-style "fg=${thm_fg},bg=default,none"
+  setw window-status-current-style "fg=default,bg=default"
 
-  # setw window-status-current-style fg=default,bg=default,none
   # setw window-status-style fg=default,bg=default,none
 
 
